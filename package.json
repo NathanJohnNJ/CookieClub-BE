@@ -2,7 +2,6 @@
   "name": "cookieclub-backend",
   "version": "1.0.0",
   "scripts": {
-    "install": "npm install",
     "start": "node src/server.js"
   },
   "author": "NJCodes",
