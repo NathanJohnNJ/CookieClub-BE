@@ -1,46 +1,33 @@
-const mongoose = require("mongoose");
-
-// const favouritesSchema = new mongoose.Schema({ 
-//         favouriteCookie: {
-//             type: String,
-//             required: false
-//         },
-//         second: String,
-//         third: String
-// });
-
-const userSchema = new mongoose.Schema ({
+const { DataTypes } = require("sequelize")
+const connection = require("../db/connection")
+const User = connection.define("User", {
     firstName: {
-        type: String,
-        required: true,
-        unique: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     lastName: {
-        type: String,
-        required: true,
-        unique: false
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true,
+        type: DataTypes.STRING,
+        allowNull: false,
         unique: true
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+        type: DataTypes.STRING, 
+        allowNull: false
     },
-    agreeToTerms: {
-        type: Boolean,
-        required: true
+    password: {
+        type: DataTypes.STRING, 
+        allowNull: false
+    },
+    agreedToTerms: {
+        type:DataTypes.BOOLEAN,
+        allowNull: false
     }
-    // favourites: [favouritesSchema]
-});
+}, 
+    {indexes: [{unique: true, fields:["username", "email"]}]}
+)
 
-const User = mongoose.model("users", userSchema);
-module.exports = User;
+module.exports = User
