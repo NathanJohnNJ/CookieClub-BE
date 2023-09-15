@@ -26,8 +26,7 @@ app.get("/health", (req, res) => {
 
 app.use(userRouter)
 app.listen(port, () => {
-    console.log(`port `, port)
     syncTables()
-    console.log (`server is listening on port ${port}`)
+    console.log (`Server is listening on port ${port}`)
 })
 

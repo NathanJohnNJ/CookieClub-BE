@@ -1,9 +1,0 @@
-{
-    "app_id": "data-dgbmp",
-    "config_version": 20210101,
-    "name": "data",
-    "location": "IE",
-    "provider_region": "aws-eu-west-2",
-    "deployment_model": "LOCAL",
-    "environment": "testing"
-}
