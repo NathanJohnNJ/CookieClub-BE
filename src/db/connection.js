@@ -1,5 +1,16 @@
-const {Sequelize} = require("sequelize") //SQL System
-const connection = new Sequelize(process.env.SQL_URI)
-connection.authenticate()
+require("dotenv").config()
+const mongoose = require("mongoose");
 
-module.exports = connection
+const connection = async  () => {
+    try {
+        await mongoose.connect (
+            process.env.MONGO_URI
+        )
+        
+    } catch (error) {
+        console.log(error)
+    }
+    console.log("DB connection established.");
+};
+
+connection()

@@ -24,10 +24,6 @@ app.get("/health", (req, res) => {
     res.status(200).json({message:"API is working"})
 })
 
-app.get("/steve", (req, res) => {
-    console.log("1111!")
-})
-
 app.use(userRouter)
 app.listen(port, () => {
     console.log(`port `, port)
