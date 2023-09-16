@@ -24,7 +24,9 @@ const registerUser = async (req, res) => {
 const login = async (req, res) => {
     try {
 	const loggedInUser = await User.findOne({
-		where: req.body.username
+		where: {
+			username: req.body.username
+		}
 	})
 	const successResponse = {
 		message: `${req.body.username} successfully logged in.`,
@@ -41,7 +43,11 @@ const login = async (req, res) => {
 
 const findUser = async(req, res) => {
     try {
-        let UserFound = await User.findOne({where: req.authUser.id})
+        let UserFound = await User.findOne({
+		where: {
+			id: req.authUser.id
+		}
+	})
         console.log("Now in find user fuction. I have been passed req.authuser", req.authUser.id)
         if (!UserFound) {throw new Error("User not found")}
         console.log(UserFound)
