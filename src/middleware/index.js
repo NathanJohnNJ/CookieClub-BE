@@ -1,13 +1,13 @@
 const User = require("../users/model")
 const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt") 
+const bcrypt = require("bcrypt")
 const saltRounds = process.env.SALT_ROUNDS
 
 const hashPass = async (req, res, next) => {
     try {
         console.log(req.body)
-        req.body.password = await bcrypt.hash(req.body.password,parseInt(saltRounds))	        
-        console.log("Encrypting password.") 
+        req.body.password = await bcrypt.hash(req.body.password,parseInt(saltRounds))
+        console.log("Encrypting password.")
         next()
 	    } catch (error) {
             console.log(error)
@@ -17,16 +17,16 @@ const hashPass = async (req, res, next) => {
 
 const comparePass = async (req, res, next) => {
     try {
-        req.user = await User.findOne({where: {username: req.body.username}})      
+        req.user = await User.findOne({where: {username: req.body.username}})
         if (req.user === null) {
             throw new Error ("Password or username doesn't match")
         }
         const comparePassword = await bcrypt.compare(req.body.password, req.user.password)
         if(!comparePassword){
             throw new Error ("Password or username doesn't match")
-        } 
+        }
         console.log("PASSWORDS MATCH")
-        next() 
+        next()
     } catch (error) {
         console.log(error)
         res.status(501).json({errorMessage: error.message, error: error})

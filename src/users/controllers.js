@@ -1,11 +1,9 @@
 const jwt = require("jsonwebtoken")
 const User = require("./model")
-console.log("!!!!!!!")
 
-const registerUser = async (req, res) => {    
-    console.log(req.body)
-    try { 
-        const user = await User.create ({
+const registerUser = async (req, res) => {
+    try {
+        const user = await User.create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             username: req.body.username,
@@ -14,7 +12,7 @@ const registerUser = async (req, res) => {
             agreedToTerms: req.body.agreedToTerms
         })
         res.status(201).json({
-            message: "successfully registered",
+            message: "Successfully registered",
             user: {username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email},
             token: await jwt.sign({id: user.id}, process.env.SECRET)
         })
@@ -24,10 +22,16 @@ const registerUser = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    try { 
+    try {
+	const loggedInUser = await User.findOne({
+		where: req.body.username
+	})
+	const successResponse = {
+		message: `${req.body.username} successfully logged in.`,
+		loggedInUser: loggedInUser
+	}
         res.status(200).json({
-            message: "success",
-            user: req.user,
+            successResponse,
             token: await jwt.sign({id: req.user.id}, process.env.SECRET)
         })
     } catch (error) {
@@ -42,23 +46,25 @@ const findUser = async(req, res) => {
         if (!UserFound) {throw new Error("User not found")}
         console.log(UserFound)
         res.status(200).json({
-            message: "success",
+            message: "Success, user found!",
             user: UserFound,
         })
     } catch (err) {
         res.status(501).json({ errorMessage: err.message });
     }
 }
-const findAll = async () => {
+const findAll = async (req, res) => {
     try {
-        const users = await User.findAll();
+        const users = await User.findAll({});
     const successResponse = {
         message: "Found all users.",
         users: users
     };
     console.log(successResponse);
+    res.status(200).json(successResponse);
     } catch (error) {
         console.log(error);
+	res.status(501).json({ errorMessage: error.message });
     }
 };
 

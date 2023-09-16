@@ -15,18 +15,18 @@ const User = connection.define("User", {
         unique: true
     },
     email: {
-        type: DataTypes.STRING, 
+        type: DataTypes.STRING,
         allowNull: false
     },
     password: {
-        type: DataTypes.STRING, 
+        type: DataTypes.STRING,
         allowNull: false
     },
     agreedToTerms: {
         type:DataTypes.BOOLEAN,
         allowNull: false
     }
-}, 
+},
     {indexes: [{unique: true, fields:["username", "email"]}]}
 )
 

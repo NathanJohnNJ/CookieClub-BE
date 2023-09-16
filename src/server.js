@@ -1,19 +1,15 @@
 require("dotenv").config()
 
-//Express
-const express = require("express") 
-const app = express() // API
+const express = require("express")
+const app = express()
 const cors = require("cors")
 const port = process.env.PORT || 5001
 
-//Midleware
 app.use(express.json())
 app.use(cors())
 
-//Routes
 const userRouter = require("./users/routes")
 
-//Models
 const User = require ("./users/model")
 
 const syncTables = () => {
