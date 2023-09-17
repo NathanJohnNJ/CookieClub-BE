@@ -1,3 +1,3 @@
 #!/bin/bash
 com=$(which node)
-$com src/server.js
+$com /home/pi/CookieClub-BE/src/server.js &

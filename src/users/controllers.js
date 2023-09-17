@@ -30,11 +30,11 @@ const login = async (req, res) => {
 	})
 	const successResponse = {
 		message: `${req.body.username} successfully logged in.`,
-		loggedInUser: loggedInUser
+		user: loggedInUser
 	}
         res.status(200).json({
             successResponse,
-            token: await jwt.sign({id: req.user.id}, process.env.SECRET)
+            token: await jwt.sign({id: loggedInUser.id}, process.env.SECRET)
         })
     } catch (error) {
         res.status(501).json({ errorMessage: error.message });
