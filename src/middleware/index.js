@@ -42,7 +42,7 @@ const tokenCheck = async (req, res, next) => {
         }
         const token = req.header("Authorization").replace("Bearer ", "")
         console.log("Encoded token = ", token)
-        const decodedToken = jwt.verify(token, process.env.SECRET)
+        const decodedToken = await jwt.verify(token, process.env.SECRET)
         console.log("DecodedToken = ", decodedToken)
         const user = await User.findOne({where: {id: decodedToken.id}})
         console.log("user = ", user)
@@ -52,7 +52,8 @@ const tokenCheck = async (req, res, next) => {
         req.authUser = user
         console.log("req.authUser = ", req.authUser)
         res.status(201).json({message: "Token check was a success."})
-        next(req.authUser)
+        next()
+        return req.authUser
     } catch (error) {
         res.status(501).json({error})
         console.log(error)

@@ -14,7 +14,7 @@ const registerUser = async (req, res) => {
         res.status(201).json({
             message: "Successfully registered",
             user: {username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email},
-            token: await jwt.sign({id: user.id}, process.env.SECRET)
+            token: jwt.sign({id: user.id}, process.env.SECRET)
         })
     } catch (error) {
         res.status(501).json ({errorMessage: error.message})
@@ -23,18 +23,15 @@ const registerUser = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-	const loggedInUser = await User.findOne({
-		where: {
-			username: req.body.username
-		}
-	})
-	const successResponse = {
-		message: `${req.body.username} successfully logged in.`,
-		user: loggedInUser
-	}
+	    const loggedInUser = await User.findOne({
+		    where: {
+			    username: req.body.username
+		    }
+	    })
         res.status(200).json({
-            successResponse,
-            token: await jwt.sign({id: loggedInUser.id}, process.env.SECRET)
+            message: `${req.body.username} successfully logged in.`,
+		    user: loggedInUser,
+            token: jwt.sign({id: loggedInUser.id}, process.env.SECRET)
         })
     } catch (error) {
         res.status(501).json({ errorMessage: error.message });
@@ -43,7 +40,7 @@ const login = async (req, res) => {
 
 const findUser = async(req, res) => {
     try {
-        let UserFound = await User.findOne({
+        const UserFound = await User.findOne({
 		where: {
 			id: req.authUser.id
 		}
@@ -62,32 +59,58 @@ const findUser = async(req, res) => {
 const findAll = async (req, res) => {
     try {
         const users = await User.findAll({});
-    const successResponse = {
-        message: "Found all users.",
-        users: users
-    };
-    console.log(successResponse);
-    res.status(200).json(successResponse);
+    res.status(200).json({
+        message: "Success, user found!",
+        users: users,
+    })
     } catch (error) {
         console.log(error);
 	res.status(501).json({ errorMessage: error.message });
     }
 };
 
-const updateUser = async(req, res) => {
+const updateUsername = async(req, res) => {
     try {
+        console.log("AuthUser from updateUser function = ", req.authUser)
         const userUpdated = await User.update(
-            {[req.body.updateKey]: req.body.updateValue},{
+            {username: req.body.updateValue},{
                 where: {
                     id:req.authUser.id
                 }
             })
-        res.status(201).json({message: `${req.authUser.username}'s ${req.body.updateKey} successfully updated to ${req.body.updateValue}.`, user: userUpdated});
+        res.status(201).json({message: `${req.authUser.username}'s username successfully updated to ${req.body.updateValue}.`, user: {username: userUpdated.username, firstName: userUpdated.firstName, lastName: userUpdated.lastName, email: userUpdated.email}});
     } catch (err) {
         res.status(501).json({ errorMessage: err.message });
     }
 }
-
+const updatePassword = async(req, res) => {
+    try {
+        console.log("AuthUser from updateUser function = ", req.authUser)
+        const userUpdated = await User.update(
+            {password: req.body.updateValue},{
+                where: {
+                    id:req.authUser.id
+                }
+            })
+        res.status(201).json({message: `${req.authUser.username}'s password successfully updated to ${req.body.updateValue}.`, user: {username: userUpdated.username, firstName: userUpdated.firstName, lastName: userUpdated.lastName, email: userUpdated.email}});
+    } catch (err) {
+        res.status(501).json({ errorMessage: err.message });
+    }
+}
+const updateEmail = async(req, res) => {
+    try {
+        console.log("AuthUser from updateUser function = ", req.authUser)
+        const userUpdated = await User.update(
+            {email: req.body.updateValue},{
+                where: {
+                    id:req.authUser.id
+                }
+            })
+        res.status(201).json({message: `${req.authUser.username}'s email successfully updated to ${req.body.updateValue}.`, user: {username: userUpdated.username, firstName: userUpdated.firstName, lastName: userUpdated.lastName, email: userUpdated.email}});
+    } catch (err) {
+        res.status(501).json({ errorMessage: err.message });
+    }
+}
 const deleteUser = async(req, res) => {
     try {
         await User.destroy({
@@ -95,7 +118,7 @@ const deleteUser = async(req, res) => {
                 id:req.authUser.id
             }
         });
-        res.status(201).json({message: `deleted user`});
+        res.status(201).json({message: `${req.authUser.firstName} ${req.authUser.lastName} (Username: ${req.authUser.username}) has been deleted.`});
     } catch (err) {
         res.status(501).json({ errorMessage: err.message });
     }
@@ -106,7 +129,9 @@ module.exports = {
     login,
     findUser,
     findAll,
-    updateUser,
+    updateUsername,
+    updatePassword,
+    updateEmail,
     deleteUser
 }
 
