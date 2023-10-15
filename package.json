@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node src/server.js"
   },
+  "engine": "18.17.1",
   "author": "NJCodes",
   "license": "ISC",
   "dependencies": {

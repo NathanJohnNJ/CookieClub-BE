@@ -4,13 +4,13 @@ const fs = require("fs");
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const port = process.env.PORT || 5001;
+const port = process.env.PORT
 app.use(express.json())
 app.use(cors())
 
 const options = {
-        key: fs.readFileSync("./cert/privkey.pem"),
-        cert: fs.readFileSync("./cert/fullchain.pem")
+        key: fs.readFileSync(process.env.KEY),
+        cert: fs.readFileSync(process.env.CERT)
 };
 const userRouter = require("./users/routes")
 const User = require ("./users/model")
